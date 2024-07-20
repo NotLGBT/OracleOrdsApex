@@ -34,40 +34,40 @@ docker exec 23cfree /bin/bash -c '
   @apexins.sql SYSAUX SYSAUX TEMP /i/
   ALTER USER APEX_PUBLIC_USER ACCOUNT UNLOCK;
   ALTER USER APEX_PUBLIC_USER IDENTIFIED BY qwer1234;
-  SQL
+SQL
 '
 docker exec 23cfree /bin/bash -c '
-cd apex
-sqlplus / as sysdba <<SQL
-ALTER SESSION SET CONTAINER = FREEPDB1;
-@apxchpwd.sql
-ADMIN
-k@mail@ru
+  cd apex
+  sqlplus / as sysdba <<SQL
+  ALTER SESSION SET CONTAINER = FREEPDB1;
+  @apxchpwd.sql
+  ADMIN
+  k@mail@ru
 SQL
 '
 
 docker exec -u root 23cfree /bin/bash -c '
-mkdir -p /home/oracle/software/{apex,ords} /home/oracle/scripts /etc/ords/config /home/oracle/logs
-cp -r /home/oracle/apex/images /home/oracle/software/apex
-echo "oracle ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-dnf install java-17-openjdk -y
-dnf install ords expect -y
-java -version
-expect <<EOF
-spawn ords --config /etc/ords/config install
+  mkdir -p /home/oracle/software/{apex,ords} /home/oracle/scripts /etc/ords/config /home/oracle/logs
+  cp -r /home/oracle/apex/images /home/oracle/software/apex
+  echo "oracle ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+  dnf install java-17-openjdk -y
+  dnf install ords expect -y
+  java -version
+  expect <<EOF
+  spawn ords --config /etc/ords/config install
 expect "Enter a number to select the TNS net service name to use or specify the database"
 send "2\r"
-expect "Provide database user name with administrator privileges.Enter the administrator username:"
+  expect "Provide database user name with administrator privileges.Enter the administrator username:"
 send "SYS\r"
-expect "Enter the database password for SYS AS SYSDBA:"
+  expect "Enter the database password for SYS AS SYSDBA:"
 send "qwer1234\r"
-expect "Enter a number to update the value or select option A to Accept and Continue"
+  expect "Enter a number to update the value or select option A to Accept and Continue"
 send "8\r"
-expect "Enter the APEX static resources location:"
+  expect "Enter the APEX static resources location:"
 send "/home/oracle/software/apex/images\r"
-expect "Enter a number to update the value or select option A to Accept and Continue"
+  expect "Enter a number to update the value or select option A to Accept and Continue"
 send "A\r"
-expect eof
+  expect eof
 EOF
 '
 
