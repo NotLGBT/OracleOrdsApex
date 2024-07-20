@@ -63,5 +63,5 @@ availabilityDomain:
 
 ingress:
   enabled: true
-  host: oracle.k8s.inno.ws 
-  tlsSecret: oracle.k8s.inno.ws 
+  host: oracle.example.com 
+  tlsSecret: oracle.example.com
