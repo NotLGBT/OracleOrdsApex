@@ -1,0 +1,1 @@
+kill `ps -ef | grep [o]rds.war | awk '{print $2}'`

@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name | quote }}
+spec:
+  ingressClassName: nginx  # Adjust this if you are using a different Ingress controller
+  rules:
+    {{- if .Values.ingress.host }}
+    - host: {{ .Values.ingress.host | quote }}  # Replace with your actual host
+      http:
+        paths:
+          - path: /listener
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name | quote }}
+                port:
+                  number: 1521
+          - path: /xmldb
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name | quote }}
+                port:
+                  number: 5500
+          - path: /ords
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name | quote }}
+                port:
+                  number: 8023
+          - path: /second-ords
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name | quote }}
+                port:
+                  number: 8080
+    {{- end }}
+  tls:
+    {{- if .Values.ingress.host }}
+    - hosts:
+      - {{ .Values.ingress.host | quote }}
+      secretName: {{ .Values.ingress.tlsSecret | quote }}  # Ensure you have created a TLS secret with this name if using TLS
+    {{- end }}
